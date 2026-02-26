@@ -1,30 +1,24 @@
+# ========== UNITY ==========
 [Ll]ibrary/
 [Tt]emp/
-[Ll]ogs/
-UserSettings/
+[Oo]bj/
 [Bb]uild/
 [Bb]uilds/
-.vscode/
-
-# Visual Studio / VS cache
-.vs/
-*.vsiidx
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# Unity caches (pewniak)
-Library/
-Temp/
 Logs/
 UserSettings/
 
-obj/
+# ========== VISUAL STUDIO ==========
+.vs/
 *.csproj
-
 *.unityproj
-*.booproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
 *.pidb
-*.svd
-*.pdb
+*.booproj
+
+# ========== OS ==========
+.DS_Store
+Thumbs.db
