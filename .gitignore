@@ -5,3 +5,26 @@ UserSettings/
 [Bb]uild/
 [Bb]uilds/
 .vscode/
+
+# Visual Studio / VS cache
+.vs/
+*.vsiidx
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Unity caches (pewniak)
+Library/
+Temp/
+Logs/
+UserSettings/
+
+obj/
+*.csproj
+
+*.unityproj
+*.booproj
+*.pidb
+*.svd
+*.pdb
