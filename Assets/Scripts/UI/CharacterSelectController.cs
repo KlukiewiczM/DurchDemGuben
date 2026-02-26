@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CharacterSelectController : MonoBehaviour
@@ -21,7 +22,11 @@ public class CharacterSelectController : MonoBehaviour
 
     private void Start()
     {
-        // domyślnie ustaw na męską
+        if (PlayerPrefs.HasKey(PrefKey))
+            selected = (CharacterType)PlayerPrefs.GetInt(PrefKey);
+        else
+            selected = CharacterType.Male;
+
         ApplySelectionVisual();
     }
 
@@ -38,12 +43,14 @@ public class CharacterSelectController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             selected = CharacterType.Male;
+            UnityEngine.Debug.Log("Selected = " + selected);
             lastInputTime = Time.unscaledTime;
             ApplySelectionVisual();
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             selected = CharacterType.Female;
+            UnityEngine.Debug.Log("Selected = " + selected);
             lastInputTime = Time.unscaledTime;
             ApplySelectionVisual();
         }
@@ -67,11 +74,25 @@ public class CharacterSelectController : MonoBehaviour
         RectTransform target = (selected == CharacterType.Male) ? maleTarget : femaleTarget;
         if (target == null) return;
 
-        // offset w dół (w pikselach UI)
-        Vector2 offset = new Vector2(0f, -100f);
+        // canvas (kamera może być null przy Screen Space Overlay)
+        Canvas canvas = selector.GetComponentInParent<Canvas>();
+        Camera cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            ? canvas.worldCamera
+            : null;
 
-        // jeśli to UI w tym samym Canvasie, to lepiej używać anchoredPosition
-        selector.anchoredPosition = target.anchoredPosition + offset;
+        // bierzemy screen position targetu
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, target.position);
+
+        // i konwertujemy na local point w przestrzeni rodzica selector’a
+        RectTransform parent = selector.parent as RectTransform;
+        if (parent == null) return;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, screenPoint, cam, out Vector2 localPoint);
+
+        // offset pod postacią
+        localPoint += new Vector2(0f, -80f);
+
+        selector.anchoredPosition = localPoint;
     }
 
     public static CharacterType GetSavedCharacter()
