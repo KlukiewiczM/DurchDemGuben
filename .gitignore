@@ -1,22 +1,24 @@
-# Visual Studio / Unity / Rider caches
-.vs/
-[Bb]in/
-[Oo]bj/
-*.user
-*.suo
-*.userprefs
-*.csproj.user
-UserSettings/
-*.csproj
-*.sln
-.vs\
-
-# VS / Copilot / IntelliCode indexes
-CopilotIndices/
-FileContentIndex/
-.vscode/
-
-# Unity
+# ========== UNITY ==========
 [Ll]ibrary/
 [Tt]emp/
-[Ll]ogs/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+Logs/
+UserSettings/
+
+# ========== VISUAL STUDIO ==========
+.vs/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+
+# ========== OS ==========
+.DS_Store
+Thumbs.db
