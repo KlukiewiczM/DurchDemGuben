@@ -40,7 +40,7 @@ public class PlayerMovement2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("MovingPlatform"))
+        if (collision.gameObject.CompareTag("MovingPlatformTag"))
         {
             transform.SetParent(collision.transform);
         }
@@ -48,7 +48,7 @@ public class PlayerMovement2D : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("MovingPlatform"))
+        if (collision.gameObject.CompareTag("MovingPlatformTag"))
         {
             transform.SetParent(null);
         }
