@@ -8,6 +8,7 @@ TagManager:
   - MovingPlatformTag
   - PlayerTag
   - KillZone
+  - PlayerFeet
   layers:
   - Default
   - TransparentFX
