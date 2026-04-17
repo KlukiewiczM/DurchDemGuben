@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using System.Collections;
+using UnityEngine;
 
 public class BuildAtFinish : MonoBehaviour
 {
@@ -11,8 +11,12 @@ public class BuildAtFinish : MonoBehaviour
     [SerializeField] private GameObject builderNpc;
     [SerializeField] private GameObject buildMessage;
 
-    [Header("Next Scene")]
-    [SerializeField] private string nextSceneName = "2LevelScene";
+    [Header("Player control")]
+    [SerializeField] private MonoBehaviour playerMovementScript;
+
+    [Header("Timing")]
+    [SerializeField] private float delayBeforeNpc = 2f;
+    [SerializeField] private float delayBeforeMessage = 1f;
 
     private bool alreadyBuilt = false;
     private bool waitingForContinue = false;
@@ -21,7 +25,7 @@ public class BuildAtFinish : MonoBehaviour
     {
         if (waitingForContinue && Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene(nextSceneName);
+            StartCoroutine(HideSequence());
         }
     }
 
@@ -35,19 +39,8 @@ public class BuildAtFinish : MonoBehaviour
 
         if (success)
         {
-            if (buildingPlaceholder != null)
-                buildingPlaceholder.SetActive(true);
-
-            if (builderNpc != null)
-                builderNpc.SetActive(true);
-
-            if (buildMessage != null)
-                buildMessage.SetActive(true);
-
             alreadyBuilt = true;
-            waitingForContinue = true;
-
-            Debug.Log("Budynek postawiony. Czekam na spację.");
+            StartCoroutine(PlayBuildSequence());
         }
         else
         {
@@ -55,4 +48,44 @@ public class BuildAtFinish : MonoBehaviour
         }
     }
 
+    private IEnumerator PlayBuildSequence()
+    {
+        if (playerMovementScript != null)
+            playerMovementScript.enabled = false;
+
+        yield return new WaitForSeconds(delayBeforeNpc);
+
+        if (builderNpc != null)
+            builderNpc.SetActive(true);
+
+        yield return new WaitForSeconds(delayBeforeMessage);
+
+        if (buildMessage != null)
+            buildMessage.SetActive(true);
+
+        if (buildingPlaceholder != null)
+            buildingPlaceholder.SetActive(true);
+
+        waitingForContinue = true;
+
+        Debug.Log("Budynek postawiony. Czekam na spację.");
+    }
+
+    private IEnumerator HideSequence()
+    {
+        waitingForContinue = false;
+
+        if (builderNpc != null)
+            builderNpc.SetActive(false);
+
+        if (buildMessage != null)
+            buildMessage.SetActive(false);
+
+        yield return null;
+
+        if (playerMovementScript != null)
+            playerMovementScript.enabled = true;
+
+        Debug.Log("Sekwencja zakończona. Gracz może iść dalej.");
+    }
 }
