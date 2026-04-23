@@ -1,56 +1,65 @@
-﻿using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CharacterSelectController : MonoBehaviour
 {
-    public enum CharacterType { Male = 0, Female = 1 }
+    public enum CharacterType
+    {
+        Male = 0,
+        Female = 1
+    }
 
-    [Header("UI References")]
-    [SerializeField] private RectTransform selector;      // strzałka / ramka
-    [SerializeField] private RectTransform maleTarget;    // pozycja nad męską postacią
-    [SerializeField] private RectTransform femaleTarget;  // pozycja nad żeńską postacią
+    [Header("UI")]
+    [SerializeField] private RectTransform selector;
+    [SerializeField] private Vector2 maleSelectorPosition = new Vector2(-500f, -210f);
+    [SerializeField] private Vector2 femaleSelectorPosition = new Vector2(500f, -210f);
+
+    [Header("Character Animators")]
+    [SerializeField] private Animator maleAnimator;
+    [SerializeField] private Animator femaleAnimator;
 
     [Header("Scene")]
     [SerializeField] private string level1SceneName = "Level1Scene";
+    [SerializeField] private float loadDelay = 0.5f;
+
+    [Header("Input")]
+    [SerializeField] private float inputCooldown = 0.15f;
 
     private CharacterType selected = CharacterType.Male;
-    private float inputCooldown = 0.15f;
     private float lastInputTime;
+    private bool isConfirming = false;
 
     private const string PrefKey = "SelectedCharacter";
+    private const string JumpTriggerName = "JumpTrigger";
 
     private void Start()
     {
-        if (PlayerPrefs.HasKey(PrefKey))
-            selected = (CharacterType)PlayerPrefs.GetInt(PrefKey);
-        else
-            selected = CharacterType.Male;
-
+        selected = (CharacterType)PlayerPrefs.GetInt(PrefKey, 0);
         ApplySelectionVisual();
     }
 
     private void Update()
     {
+        if (isConfirming) return;
+
         HandleLeftRight();
         HandleConfirm();
     }
 
     private void HandleLeftRight()
     {
-        if (Time.unscaledTime - lastInputTime < inputCooldown) return;
+        if (Time.unscaledTime - lastInputTime < inputCooldown)
+            return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             selected = CharacterType.Male;
-            UnityEngine.Debug.Log("Selected = " + selected);
             lastInputTime = Time.unscaledTime;
             ApplySelectionVisual();
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             selected = CharacterType.Female;
-            UnityEngine.Debug.Log("Selected = " + selected);
             lastInputTime = Time.unscaledTime;
             ApplySelectionVisual();
         }
@@ -58,12 +67,30 @@ public class CharacterSelectController : MonoBehaviour
 
     private void HandleConfirm()
     {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            PlayerPrefs.SetInt(PrefKey, (int)selected);
-            PlayerPrefs.Save();
+        if (!Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.KeypadEnter))
+            return;
 
-            SceneManager.LoadScene(level1SceneName);
+        isConfirming = true;
+
+        PlayerPrefs.SetInt(PrefKey, (int)selected);
+        PlayerPrefs.Save();
+
+        PlaySelectedCharacterJump();
+
+        Invoke(nameof(LoadSelectedScene), loadDelay);
+    }
+
+    private void PlaySelectedCharacterJump()
+    {
+        if (selected == CharacterType.Male)
+        {
+            if (maleAnimator != null)
+                maleAnimator.SetTrigger(JumpTriggerName);
+        }
+        else
+        {
+            if (femaleAnimator != null)
+                femaleAnimator.SetTrigger(JumpTriggerName);
         }
     }
 
@@ -71,33 +98,18 @@ public class CharacterSelectController : MonoBehaviour
     {
         if (selector == null) return;
 
-        RectTransform target = (selected == CharacterType.Male) ? maleTarget : femaleTarget;
-        if (target == null) return;
+        selector.anchoredPosition = selected == CharacterType.Male
+            ? maleSelectorPosition
+            : femaleSelectorPosition;
+    }
 
-        // canvas (kamera może być null przy Screen Space Overlay)
-        Canvas canvas = selector.GetComponentInParent<Canvas>();
-        Camera cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-            ? canvas.worldCamera
-            : null;
-
-        // bierzemy screen position targetu
-        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, target.position);
-
-        // i konwertujemy na local point w przestrzeni rodzica selector’a
-        RectTransform parent = selector.parent as RectTransform;
-        if (parent == null) return;
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, screenPoint, cam, out Vector2 localPoint);
-
-        // offset pod postacią
-        localPoint += new Vector2(0f, -80f);
-
-        selector.anchoredPosition = localPoint;
+    private void LoadSelectedScene()
+    {
+        SceneManager.LoadScene(level1SceneName);
     }
 
     public static CharacterType GetSavedCharacter()
     {
-        int val = PlayerPrefs.GetInt(PrefKey, 0);
-        return (CharacterType)val;
+        return (CharacterType)PlayerPrefs.GetInt(PrefKey, 0);
     }
 }
