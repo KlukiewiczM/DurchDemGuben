@@ -907,7 +907,11 @@ MonoBehaviour:
   selector: {fileID: 1032890049}
   maleSelectorPosition: {x: -500, y: -210}
   femaleSelectorPosition: {x: 500, y: -210}
-  level1SceneName: 1LevelScene
+  maleAnimator: {fileID: 1299414960}
+  femaleAnimator: {fileID: 0}
+  level1SceneName: 1LevelSceneMVP
+  loadDelay: 1
+  inputCooldown: 0.4
 --- !u!4 &988030676
 Transform:
   m_ObjectHideFlags: 0
