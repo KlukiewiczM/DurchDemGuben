@@ -2,29 +2,50 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject malePrefab;
-    [SerializeField] private GameObject femalePrefab;
+    [Header("Player Prefabs")]
+    [SerializeField] private GameObject malePlayerPrefab;
+    [SerializeField] private GameObject femalePlayerPrefab;
 
-    [Header("Optional (for UI characters)")]
-    [SerializeField] private Transform uiParent; // przypnij Canvas.transform
+    [Header("Spawn")]
+    [SerializeField] private Transform spawnPoint;
 
-    void Start()
+    private const string PrefKey = "SelectedCharacter";
+
+    private void Start()
     {
-        var selected = CharacterSelectController.GetSavedCharacter();
-        Debug.Log("Spawning: " + selected);
+        SpawnSelectedPlayer();
+    }
 
-        GameObject prefabToSpawn =
-            (selected == CharacterSelectController.CharacterType.Male)
-            ? malePrefab
-            : femalePrefab;
+    private void SpawnSelectedPlayer()
+    {
+        int selectedCharacter = PlayerPrefs.GetInt(PrefKey, 0);
 
-        if (uiParent != null)
+        GameObject prefabToSpawn = selectedCharacter == 0
+            ? malePlayerPrefab
+            : femalePlayerPrefab;
+
+        if (prefabToSpawn == null)
         {
-            Instantiate(prefabToSpawn, uiParent);
+            Debug.LogError("Player prefab is missing!");
+            return;
         }
-        else
+
+        Vector3 spawnPosition = spawnPoint != null
+            ? spawnPoint.position
+            : transform.position;
+
+        GameObject spawnedPlayer = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+
+        SetupCamera(spawnedPlayer);
+    }
+
+    private void SetupCamera(GameObject player)
+    {
+        CameraFollow2D cameraFollow = Camera.main.GetComponent<CameraFollow2D>();
+
+        if (cameraFollow != null)
         {
-            Instantiate(prefabToSpawn, transform.position, Quaternion.identity);
+            cameraFollow.SetTarget(player.transform);
         }
     }
 }

@@ -80,17 +80,39 @@ public class CharacterSelectController : MonoBehaviour
         Invoke(nameof(LoadSelectedScene), loadDelay);
     }
 
+    //private void PlaySelectedCharacterJump()
+    //{
+    //    if (selected == CharacterType.Male)
+    //    {
+    //        if (maleAnimator != null)
+    //            maleAnimator.SetTrigger(JumpTriggerName);
+    //    }
+    //    else
+    //    {
+    //        if (femaleAnimator != null)
+    //            femaleAnimator.SetTrigger(JumpTriggerName);
+    //    }
+    //}
+
     private void PlaySelectedCharacterJump()
     {
         if (selected == CharacterType.Male)
         {
+            Debug.Log("Male selected - jump animation");
+
             if (maleAnimator != null)
                 maleAnimator.SetTrigger(JumpTriggerName);
+            else
+                Debug.LogWarning("Male Animator is not assigned!");
         }
-        else
+        else if (selected == CharacterType.Female)
         {
+            Debug.Log("Female selected - jump animation");
+
             if (femaleAnimator != null)
                 femaleAnimator.SetTrigger(JumpTriggerName);
+            else
+                Debug.LogWarning("Female Animator is not assigned!");
         }
     }
 

@@ -47,4 +47,9 @@ public class CameraFollow2D : MonoBehaviour
             smoothTime
         );
     }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
 }
