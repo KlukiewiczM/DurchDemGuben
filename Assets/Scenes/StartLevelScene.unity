@@ -943,8 +943,12 @@ MonoBehaviour:
   selector: {fileID: 1032890049}
   maleSelectorPosition: {x: -500, y: -210}
   femaleSelectorPosition: {x: 500, y: -210}
+  maleCharacter: {fileID: 703483314}
+  femaleCharacter: {fileID: 1459928889}
   maleAnimator: {fileID: 1299414960}
   femaleAnimator: {fileID: 1459928890}
+  jumpHeight: 200
+  jumpDuration: 0.6
   level1SceneName: 1LevelSceneMVP
   loadDelay: 1
   inputCooldown: 0.4

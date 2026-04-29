@@ -10,6 +10,7 @@ TagManager:
   - KillZone
   - PlayerFeet
   - Coin
+  - HeartUI
   layers:
   - Default
   - TransparentFX

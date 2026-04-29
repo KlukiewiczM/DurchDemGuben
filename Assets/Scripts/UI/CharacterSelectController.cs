@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CharacterSelectController : MonoBehaviour
@@ -14,9 +15,17 @@ public class CharacterSelectController : MonoBehaviour
     [SerializeField] private Vector2 maleSelectorPosition = new Vector2(-500f, -210f);
     [SerializeField] private Vector2 femaleSelectorPosition = new Vector2(500f, -210f);
 
+    [Header("Character RectTransforms")]
+    [SerializeField] private RectTransform maleCharacter;
+    [SerializeField] private RectTransform femaleCharacter;
+
     [Header("Character Animators")]
     [SerializeField] private Animator maleAnimator;
     [SerializeField] private Animator femaleAnimator;
+
+    [Header("Jump Visual")]
+    [SerializeField] private float jumpHeight = 80f;
+    [SerializeField] private float jumpDuration = 0.35f;
 
     [Header("Scene")]
     [SerializeField] private string level1SceneName = "Level1Scene";
@@ -80,40 +89,53 @@ public class CharacterSelectController : MonoBehaviour
         Invoke(nameof(LoadSelectedScene), loadDelay);
     }
 
-    //private void PlaySelectedCharacterJump()
-    //{
-    //    if (selected == CharacterType.Male)
-    //    {
-    //        if (maleAnimator != null)
-    //            maleAnimator.SetTrigger(JumpTriggerName);
-    //    }
-    //    else
-    //    {
-    //        if (femaleAnimator != null)
-    //            femaleAnimator.SetTrigger(JumpTriggerName);
-    //    }
-    //}
-
     private void PlaySelectedCharacterJump()
     {
         if (selected == CharacterType.Male)
         {
-            Debug.Log("Male selected - jump animation");
-
             if (maleAnimator != null)
                 maleAnimator.SetTrigger(JumpTriggerName);
-            else
-                Debug.LogWarning("Male Animator is not assigned!");
-        }
-        else if (selected == CharacterType.Female)
-        {
-            Debug.Log("Female selected - jump animation");
 
+            if (maleCharacter != null)
+                StartCoroutine(JumpUICharacter(maleCharacter));
+        }
+        else
+        {
             if (femaleAnimator != null)
                 femaleAnimator.SetTrigger(JumpTriggerName);
-            else
-                Debug.LogWarning("Female Animator is not assigned!");
+
+            if (femaleCharacter != null)
+                StartCoroutine(JumpUICharacter(femaleCharacter));
         }
+    }
+
+    private IEnumerator JumpUICharacter(RectTransform character)
+    {
+        Vector2 startPosition = character.anchoredPosition;
+        Vector2 topPosition = startPosition + new Vector2(0f, jumpHeight);
+
+        float halfDuration = jumpDuration / 2f;
+        float timer = 0f;
+
+        while (timer < halfDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+            float t = timer / halfDuration;
+            character.anchoredPosition = Vector2.Lerp(startPosition, topPosition, t);
+            yield return null;
+        }
+
+        timer = 0f;
+
+        while (timer < halfDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+            float t = timer / halfDuration;
+            character.anchoredPosition = Vector2.Lerp(topPosition, startPosition, t);
+            yield return null;
+        }
+
+        character.anchoredPosition = startPosition;
     }
 
     private void ApplySelectionVisual()

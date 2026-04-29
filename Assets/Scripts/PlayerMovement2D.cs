@@ -8,7 +8,7 @@ public class PlayerMovement2D : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.15f;
+    [SerializeField] private float rayDistance = 0.2f;
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Animation")]
@@ -45,7 +45,14 @@ public class PlayerMovement2D : MonoBehaviour
 
     private void HandleJump()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(
+            groundCheck.position,
+            Vector2.down,
+            rayDistance,
+            groundLayer
+        );
+
+        isGrounded = hit.collider != null;
 
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && isGrounded)
         {
@@ -77,7 +84,12 @@ public class PlayerMovement2D : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (groundCheck == null) return;
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(
+            groundCheck.position,
+            groundCheck.position + Vector3.down * rayDistance
+        );
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
