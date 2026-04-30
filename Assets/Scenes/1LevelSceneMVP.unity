@@ -4085,6 +4085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinPickup
   playerTag: PlayerTag
   value: 1
+  collectSound: {fileID: 8300000, guid: 8458875093ffd3c4296d383bec1eb5ba, type: 3}
 --- !u!58 &1405005172
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4872,6 +4873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinPickup
   playerTag: PlayerTag
   value: 1
+  collectSound: {fileID: 8300000, guid: 8458875093ffd3c4296d383bec1eb5ba, type: 3}
 --- !u!58 &1711854236
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5214,6 +5216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinPickup
   playerTag: PlayerTag
   value: 1
+  collectSound: {fileID: 8300000, guid: 8458875093ffd3c4296d383bec1eb5ba, type: 3}
 --- !u!58 &1822487115
 CircleCollider2D:
   m_ObjectHideFlags: 0

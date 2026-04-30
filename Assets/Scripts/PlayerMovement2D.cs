@@ -15,6 +15,10 @@ public class PlayerMovement2D : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioSource audioSource;
+
     private Rigidbody2D rb;
     private bool isGrounded;
 
@@ -27,6 +31,9 @@ public class PlayerMovement2D : MonoBehaviour
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -60,6 +67,9 @@ public class PlayerMovement2D : MonoBehaviour
 
             if (animator != null)
                 animator.SetTrigger("JumpTrigger");
+
+            if (audioSource != null && jumpSound != null)
+                audioSource.PlayOneShot(jumpSound);
         }
     }
 
@@ -95,16 +105,12 @@ public class PlayerMovement2D : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("MovingPlatformTag"))
-        {
             transform.SetParent(collision.transform);
-        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("MovingPlatformTag"))
-        {
             transform.SetParent(null);
-        }
     }
 }
