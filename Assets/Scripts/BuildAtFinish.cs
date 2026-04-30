@@ -8,12 +8,14 @@ public class BuildAtFinish : MonoBehaviour
 
     [Header("Objects to show")]
     [SerializeField] private GameObject buildingPlaceholder;
+    [SerializeField] private GameObject buildAnimationObject;
     [SerializeField] private GameObject builderNpc;
     [SerializeField] private GameObject buildMessage;
 
     [Header("Timing")]
     [SerializeField] private float delayBeforeNpc = 2f;
     [SerializeField] private float delayBeforeMessage = 1f;
+    [SerializeField] private float buildAnimationDuration = 1.2f;
 
     private bool alreadyBuilt = false;
     private bool waitingForContinue = false;
@@ -22,12 +24,25 @@ public class BuildAtFinish : MonoBehaviour
     private Rigidbody2D playerRb;
     private Animator playerAnimator;
 
+    private void Start()
+    {
+        if (buildingPlaceholder != null)
+            buildingPlaceholder.SetActive(false);
+
+        if (buildAnimationObject != null)
+            buildAnimationObject.SetActive(false);
+
+        if (builderNpc != null)
+            builderNpc.SetActive(false);
+
+        if (buildMessage != null)
+            buildMessage.SetActive(false);
+    }
+
     private void Update()
     {
         if (waitingForContinue && Input.GetKeyDown(KeyCode.Space))
-        {
             StartCoroutine(HideSequence());
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -39,21 +54,18 @@ public class BuildAtFinish : MonoBehaviour
         if (!movement.CompareTag(playerTag)) return;
         if (CoinManager.Instance == null) return;
 
-        bool success = CoinManager.Instance.SpendCoins(requiredCoins);
-
-        if (success)
-        {
-            playerMovement = movement;
-            playerRb = movement.GetComponent<Rigidbody2D>();
-            playerAnimator = movement.GetComponent<Animator>();
-
-            alreadyBuilt = true;
-            StartCoroutine(PlayBuildSequence());
-        }
-        else
+        if (!CoinManager.Instance.SpendCoins(requiredCoins))
         {
             Debug.Log("Za mało monet, żeby postawić budynek.");
+            return;
         }
+
+        playerMovement = movement;
+        playerRb = movement.GetComponent<Rigidbody2D>();
+        playerAnimator = movement.GetComponent<Animator>();
+
+        alreadyBuilt = true;
+        StartCoroutine(PlayBuildSequence());
     }
 
     private IEnumerator PlayBuildSequence()
@@ -69,6 +81,14 @@ public class BuildAtFinish : MonoBehaviour
 
         if (buildMessage != null)
             buildMessage.SetActive(true);
+
+        if (buildAnimationObject != null)
+            buildAnimationObject.SetActive(true);
+
+        yield return new WaitForSeconds(buildAnimationDuration);
+
+        if (buildAnimationObject != null)
+            buildAnimationObject.SetActive(false);
 
         if (buildingPlaceholder != null)
             buildingPlaceholder.SetActive(true);
