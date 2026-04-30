@@ -10,9 +10,6 @@ public class DialogueTriggerEvent : MonoBehaviour
     [SerializeField] private GameObject storyNpc;
     [SerializeField] private GameObject storyMessage;
 
-    [Header("Player control")]
-    [SerializeField] private MonoBehaviour playerMovementScript;
-
     [Header("Settings")]
     [SerializeField] private bool triggerOnlyOnce = true;
     [SerializeField] private bool waitForSpace = true;
@@ -21,10 +18,22 @@ public class DialogueTriggerEvent : MonoBehaviour
 
     private bool hasTriggered = false;
 
+    private PlayerMovement2D playerMovement;
+    private Rigidbody2D playerRb;
+    private Animator playerAnimator;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (hasTriggered && triggerOnlyOnce) return;
-        if (!other.CompareTag(playerTag)) return;
+
+        PlayerMovement2D movement = other.GetComponentInParent<PlayerMovement2D>();
+        if (movement == null) return;
+
+        if (!movement.CompareTag(playerTag)) return;
+
+        playerMovement = movement;
+        playerRb = movement.GetComponent<Rigidbody2D>();
+        playerAnimator = movement.GetComponent<Animator>();
 
         hasTriggered = true;
         StartCoroutine(PlayDialogue());
@@ -32,8 +41,7 @@ public class DialogueTriggerEvent : MonoBehaviour
 
     private IEnumerator PlayDialogue()
     {
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = false;
+        FreezePlayer();
 
         yield return new WaitForSeconds(delayBeforeDialogue);
 
@@ -59,7 +67,32 @@ public class DialogueTriggerEvent : MonoBehaviour
         if (storyMessage != null)
             storyMessage.SetActive(false);
 
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = true;
+        UnfreezePlayer();
+    }
+
+    private void FreezePlayer()
+    {
+        if (playerRb != null)
+        {
+            playerRb.linearVelocity = Vector2.zero;
+            playerRb.angularVelocity = 0f;
+        }
+
+        if (playerAnimator != null)
+        {
+            playerAnimator.SetFloat("Speed", 0f);
+            playerAnimator.SetBool("IsGrounded", true);
+            playerAnimator.ResetTrigger("JumpTrigger");
+            playerAnimator.Play("Idle");
+        }
+
+        if (playerMovement != null)
+            playerMovement.enabled = false;
+    }
+
+    private void UnfreezePlayer()
+    {
+        if (playerMovement != null)
+            playerMovement.enabled = true;
     }
 }

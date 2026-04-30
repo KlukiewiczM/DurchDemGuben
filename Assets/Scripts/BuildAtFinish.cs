@@ -11,15 +11,16 @@ public class BuildAtFinish : MonoBehaviour
     [SerializeField] private GameObject builderNpc;
     [SerializeField] private GameObject buildMessage;
 
-    [Header("Player control")]
-    [SerializeField] private MonoBehaviour playerMovementScript;
-
     [Header("Timing")]
     [SerializeField] private float delayBeforeNpc = 2f;
     [SerializeField] private float delayBeforeMessage = 1f;
 
     private bool alreadyBuilt = false;
     private bool waitingForContinue = false;
+
+    private PlayerMovement2D playerMovement;
+    private Rigidbody2D playerRb;
+    private Animator playerAnimator;
 
     private void Update()
     {
@@ -32,13 +33,20 @@ public class BuildAtFinish : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (alreadyBuilt) return;
-        if (!other.CompareTag(playerTag)) return;
+
+        PlayerMovement2D movement = other.GetComponentInParent<PlayerMovement2D>();
+        if (movement == null) return;
+        if (!movement.CompareTag(playerTag)) return;
         if (CoinManager.Instance == null) return;
 
         bool success = CoinManager.Instance.SpendCoins(requiredCoins);
 
         if (success)
         {
+            playerMovement = movement;
+            playerRb = movement.GetComponent<Rigidbody2D>();
+            playerAnimator = movement.GetComponent<Animator>();
+
             alreadyBuilt = true;
             StartCoroutine(PlayBuildSequence());
         }
@@ -50,8 +58,7 @@ public class BuildAtFinish : MonoBehaviour
 
     private IEnumerator PlayBuildSequence()
     {
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = false;
+        FreezePlayer();
 
         yield return new WaitForSeconds(delayBeforeNpc);
 
@@ -83,9 +90,34 @@ public class BuildAtFinish : MonoBehaviour
 
         yield return null;
 
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = true;
+        UnfreezePlayer();
 
         Debug.Log("Sekwencja zakończona. Gracz może iść dalej.");
+    }
+
+    private void FreezePlayer()
+    {
+        if (playerRb != null)
+        {
+            playerRb.linearVelocity = Vector2.zero;
+            playerRb.angularVelocity = 0f;
+        }
+
+        if (playerAnimator != null)
+        {
+            playerAnimator.SetFloat("Speed", 0f);
+            playerAnimator.SetBool("IsGrounded", true);
+            playerAnimator.ResetTrigger("JumpTrigger");
+            playerAnimator.Play("Idle");
+        }
+
+        if (playerMovement != null)
+            playerMovement.enabled = false;
+    }
+
+    private void UnfreezePlayer()
+    {
+        if (playerMovement != null)
+            playerMovement.enabled = true;
     }
 }

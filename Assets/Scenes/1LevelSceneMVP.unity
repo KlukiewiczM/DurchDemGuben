@@ -925,7 +925,7 @@ Transform:
   m_GameObject: {fileID: 323067076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.498, y: -0.461, z: 0}
+  m_LocalPosition: {x: 37.83, y: -0.461, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1225,7 +1225,7 @@ Transform:
   m_GameObject: {fileID: 338216189}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.15, y: -0.61, z: 0}
+  m_LocalPosition: {x: 7.642, y: -0.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1927,7 +1927,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -546.35, y: -287.73}
+  m_AnchoredPosition: {x: -544.91986, y: -287.73}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &681309261
@@ -2406,7 +2406,6 @@ MonoBehaviour:
   playerTag: PlayerTag
   storyNpc: {fileID: 338216189}
   storyMessage: {fileID: 681309259}
-  playerMovementScript: {fileID: 0}
   triggerOnlyOnce: 1
   waitForSpace: 1
   autoHideAfterSeconds: 3
@@ -2466,8 +2465,8 @@ Transform:
   m_GameObject: {fileID: 702921856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.97, y: 0.73, z: 0}
-  m_LocalScale: {x: 1.6573988, y: 4.199486, z: 1.6573988}
+  m_LocalPosition: {x: 5.224, y: -0.273, z: 0}
+  m_LocalScale: {x: 1.6573988, y: 2.20473, z: 1.6573988}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2949,7 +2948,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -514.0767, y: -287.91888}
+  m_AnchoredPosition: {x: -513.5396, y: -287.91888}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &928837538
@@ -5573,7 +5572,6 @@ MonoBehaviour:
   buildingPlaceholder: {fileID: 176883485}
   builderNpc: {fileID: 323067076}
   buildMessage: {fileID: 833454261}
-  playerMovementScript: {fileID: 0}
   delayBeforeNpc: 2
   delayBeforeMessage: 1
 --- !u!61 &1835569727
