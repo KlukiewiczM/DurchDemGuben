@@ -76,7 +76,7 @@ public class CharacterSelectController : MonoBehaviour
 
     private void HandleConfirm()
     {
-        if (!Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (!Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.Space))
             return;
 
         isConfirming = true;

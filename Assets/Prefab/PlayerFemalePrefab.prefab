@@ -186,12 +186,14 @@ MonoBehaviour:
   moveSpeed: 3.5
   jumpForce: 8
   groundCheck: {fileID: 2511614765099862010}
-  groundCheckRadius: 0.15
+  rayDistance: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  jumpSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!114 &5058641601161469145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +210,7 @@ MonoBehaviour:
   lives: 3
   heartsUI: {fileID: 0}
   killTag: KillZone
+  heartUITag: HeartUI
   invincibilityTime: 0.5
 --- !u!95 &6956363046708801404
 Animator:
@@ -219,7 +222,7 @@ Animator:
   m_GameObject: {fileID: 2127263888556346159}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 15a122c76c38fb44d8be542bb0f0b857, type: 2}
+  m_Controller: {fileID: 9100000, guid: d5b7f714eac18404bb1acca49d25eb45, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

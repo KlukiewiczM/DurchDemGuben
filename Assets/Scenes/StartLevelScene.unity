@@ -817,7 +817,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Kliknij ENTER, aby wybra\u0107 posta\u0107 i rozpocz\u0105\u0107 gr\u0119"
+  m_text: "Kliknij Space, aby wybra\u0107 posta\u0107 i rozpocz\u0105\u0107 gr\u0119"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

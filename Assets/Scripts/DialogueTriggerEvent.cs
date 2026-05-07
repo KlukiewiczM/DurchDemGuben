@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class DialogueTriggerEvent : MonoBehaviour
@@ -15,6 +15,9 @@ public class DialogueTriggerEvent : MonoBehaviour
     [SerializeField] private bool waitForSpace = true;
     [SerializeField] private float autoHideAfterSeconds = 3f;
     [SerializeField] private float delayBeforeDialogue = 2f;
+
+    [Header("Space unlock")]
+    [SerializeField] private float secondsBeforeSpaceAllowed = 6f;
 
     private bool hasTriggered = false;
 
@@ -53,6 +56,10 @@ public class DialogueTriggerEvent : MonoBehaviour
 
         if (waitForSpace)
         {
+            // blokada skipa
+            yield return new WaitForSeconds(secondsBeforeSpaceAllowed);
+
+            // dopiero teraz można zamknąć SPACE
             while (!Input.GetKeyDown(KeyCode.Space))
                 yield return null;
         }

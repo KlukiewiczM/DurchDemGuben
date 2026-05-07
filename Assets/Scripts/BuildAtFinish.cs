@@ -14,6 +14,13 @@ public class BuildAtFinish : MonoBehaviour
     [SerializeField] private GameObject builderNpc;
     [SerializeField] private GameObject buildMessage;
 
+    [Header("Not enough coins")]
+    [SerializeField] private GameObject notEnoughCoinsNpc;
+    [SerializeField] private GameObject notEnoughCoinsMessage;
+
+    [Header("Blocking")]
+    [SerializeField] private GameObject blockingWall;
+
     [Header("Audio")]
     [SerializeField] private AudioClip buildSound;
     [SerializeField] private float buildSoundVolume = 1f;
@@ -27,6 +34,7 @@ public class BuildAtFinish : MonoBehaviour
 
     private bool alreadyBuilt = false;
     private bool waitingForContinue = false;
+    private bool waitingForNotEnoughCoinsContinue = false;
 
     private PlayerMovement2D playerMovement;
     private Rigidbody2D playerRb;
@@ -57,35 +65,96 @@ public class BuildAtFinish : MonoBehaviour
 
         if (buildMessage != null)
             buildMessage.SetActive(false);
+
+        if (notEnoughCoinsNpc != null)
+            notEnoughCoinsNpc.SetActive(false);
+
+        if (notEnoughCoinsMessage != null)
+            notEnoughCoinsMessage.SetActive(false);
+
+        CheckWallState();
     }
 
     private void Update()
     {
+        CheckWallState();
+
         if (waitingForContinue && Input.GetKeyDown(KeyCode.Space))
             StartCoroutine(HideSequence());
+
+        if (waitingForNotEnoughCoinsContinue && Input.GetKeyDown(KeyCode.Space))
+            StartCoroutine(HideNotEnoughCoinsSequence());
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (alreadyBuilt) return;
+        if (waitingForContinue || waitingForNotEnoughCoinsContinue) return;
 
         PlayerMovement2D movement = other.GetComponentInParent<PlayerMovement2D>();
         if (movement == null) return;
         if (!movement.CompareTag(playerTag)) return;
         if (CoinManager.Instance == null) return;
 
-        if (!CoinManager.Instance.SpendCoins(requiredCoins))
-        {
-            Debug.Log("Za mało monet, żeby postawić budynek.");
-            return;
-        }
-
         playerMovement = movement;
         playerRb = movement.GetComponent<Rigidbody2D>();
         playerAnimator = movement.GetComponent<Animator>();
 
+        if (!CoinManager.Instance.SpendCoins(requiredCoins))
+        {
+            StartCoroutine(ShowNotEnoughCoinsSequence());
+            return;
+        }
+
+        if (blockingWall != null)
+            blockingWall.SetActive(false);
+
         alreadyBuilt = true;
         StartCoroutine(PlayBuildSequence());
+    }
+
+    private void CheckWallState()
+    {
+        if (blockingWall == null || CoinManager.Instance == null) return;
+
+        if (alreadyBuilt)
+        {
+            blockingWall.SetActive(false);
+            return;
+        }
+
+        bool hasEnoughCoins = CoinManager.Instance.Coins >= requiredCoins;
+        blockingWall.SetActive(!hasEnoughCoins);
+    }
+
+    private IEnumerator ShowNotEnoughCoinsSequence()
+    {
+        FreezePlayer();
+
+        if (notEnoughCoinsNpc != null)
+            notEnoughCoinsNpc.SetActive(true);
+
+        if (notEnoughCoinsMessage != null)
+            notEnoughCoinsMessage.SetActive(true);
+
+        waitingForNotEnoughCoinsContinue = true;
+
+        yield return null;
+    }
+
+    private IEnumerator HideNotEnoughCoinsSequence()
+    {
+        waitingForNotEnoughCoinsContinue = false;
+
+        if (notEnoughCoinsNpc != null)
+            notEnoughCoinsNpc.SetActive(false);
+
+        if (notEnoughCoinsMessage != null)
+            notEnoughCoinsMessage.SetActive(false);
+
+        yield return null;
+
+        UnfreezePlayer();
     }
 
     private IEnumerator PlayBuildSequence()
@@ -127,6 +196,9 @@ public class BuildAtFinish : MonoBehaviour
 
         if (constructionObject != null)
             constructionObject.SetActive(false);
+
+        if (blockingWall != null)
+            blockingWall.SetActive(false);
 
         if (buildingPlaceholder != null)
         {
