@@ -163,6 +163,9 @@ public class FinalQuizTrigger : MonoBehaviour
         {
             quizActive = false;
 
+            if (wrongAnswerText != null)
+                wrongAnswerText.gameObject.SetActive(false);
+
             if (quizPanel != null)
                 quizPanel.SetActive(false);
 
@@ -172,7 +175,7 @@ public class FinalQuizTrigger : MonoBehaviour
         {
             if (wrongAnswerText != null)
             {
-                wrongAnswerText.text = "Spróbuj jeszcze raz!";
+                wrongAnswerText.text = "Versuchen Sie es erneut!";
                 wrongAnswerText.gameObject.SetActive(true);
             }
         }
@@ -180,6 +183,9 @@ public class FinalQuizTrigger : MonoBehaviour
 
     private IEnumerator CorrectAnswerSequence()
     {
+
+        Debug.Log("DOBRA ODPOWIEDZ - START SEKWENCJI");
+
         if (backgroundMusicSource != null && finalMusic != null)
         {
             backgroundMusicSource.clip = finalMusic;
@@ -190,19 +196,34 @@ public class FinalQuizTrigger : MonoBehaviour
         if (buildAnimationObject != null)
             buildAnimationObject.SetActive(true);
 
+        else
+        {
+            Debug.LogWarning("Build Animation Object nie jest podpiety!");
+        }
+
+
         yield return new WaitForSeconds(1.5f);
 
         if (buildAnimationObject != null)
             buildAnimationObject.SetActive(false);
 
         if (constructionBackground != null)
+        {
+            Debug.Log("Dezaktywuje construction");
             constructionBackground.SetActive(false);
+        }
 
         if (cityFestivalSceneObject != null)
+        {
+            Debug.Log("Aktywuje Stadtfest");
             cityFestivalSceneObject.SetActive(true);
+        }
 
         if (crowdObject != null)
+        {
+            Debug.Log("Aktywuje crowd");
             crowdObject.SetActive(true);
+        }
 
         if (mayorObject != null)
             mayorObject.SetActive(false);
