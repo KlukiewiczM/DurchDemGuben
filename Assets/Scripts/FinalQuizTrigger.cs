@@ -29,6 +29,9 @@ public class FinalQuizTrigger : MonoBehaviour
     [SerializeField] private AudioClip finalMusic;
     [SerializeField] private GameObject constructionBackground;
     [SerializeField] private GameObject buildAnimationObject;
+    [Header("Build Sound")]
+    [SerializeField] private AudioClip buildSound;
+    [SerializeField] private float buildSoundVolume = 1f;
     [SerializeField] private GameObject cityFestivalSceneObject;
     [SerializeField] private GameObject crowdObject;
 
@@ -194,7 +197,10 @@ public class FinalQuizTrigger : MonoBehaviour
         }
 
         if (buildAnimationObject != null)
+        {
             buildAnimationObject.SetActive(true);
+            PlayBuildSound();
+        }
 
         else
         {
@@ -309,13 +315,35 @@ public class FinalQuizTrigger : MonoBehaviour
             playerMovement.enabled = true;
     }
 
+    private void PlayBuildSound()
+    {
+        if (buildSound == null || Camera.main == null)
+            return;
+
+        AudioSource.PlayClipAtPoint(
+            buildSound,
+            Camera.main.transform.position,
+            buildSoundVolume
+        );
+    }
+
     private void FinishGame()
     {
         Time.timeScale = 1f;
 
         if (!string.IsNullOrEmpty(endSceneName))
         {
-            SceneManager.LoadScene(endSceneName);
+            FadeManager fadeManager = FindFirstObjectByType<FadeManager>();
+
+            if (fadeManager != null)
+            {
+                StartCoroutine(fadeManager.FadeOut(endSceneName));
+            }
+            else
+            {
+                SceneManager.LoadScene(endSceneName);
+            }
+
             return;
         }
 
@@ -324,7 +352,7 @@ public class FinalQuizTrigger : MonoBehaviour
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
         }
     }

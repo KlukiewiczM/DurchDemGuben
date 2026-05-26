@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StartLevelScene.unity
     guid: 3d8db3be6db77f34d856e0ef48a38da5
   - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: 1124b774a25dba648bc4c8268ab97e93
+  - enabled: 1
     path: Assets/Scenes/1LevelSceneMVP.unity
     guid: 205ffcf96af51f84c9a66b1cc8b1e1de
   - enabled: 1
@@ -17,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/3LevelSceneMVP.unity
     guid: c2cf380af0aa5e24ebc9d4c31e328629
+  - enabled: 1
+    path: Assets/Scenes/CongratulionsScene.unity
+    guid: c3b429e82eaac994080691bd7a849122
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
