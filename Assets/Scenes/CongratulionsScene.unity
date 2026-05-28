@@ -572,8 +572,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fcfe0b238aa613418db95060f1ac4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoNextScene
-  nextSceneName: 1LevelSceneMVP
-  delayBeforeNextScene: 7
+  nextSceneName: StartLevelScene
+  delayBeforeNextScene: 5
 --- !u!82 &1632598485
 AudioSource:
   m_ObjectHideFlags: 0

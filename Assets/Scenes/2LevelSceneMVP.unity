@@ -427,9 +427,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f040daadfa3634e8744f93af4b1c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
-  pauseMenuPanel: {fileID: 0}
-  continueButton: {fileID: 0}
-  exitButton: {fileID: 0}
+  pauseMenuPanel: {fileID: 794770779}
+  continueButton: {fileID: 1591274652}
+  exitButton: {fileID: 1730761484}
 --- !u!82 &80619725
 AudioSource:
   m_ObjectHideFlags: 0
