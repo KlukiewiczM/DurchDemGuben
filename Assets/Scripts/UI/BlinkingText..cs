@@ -4,7 +4,7 @@ using TMPro;
 public class BlinkingText : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
-    [SerializeField] private float speed = 2f; // szybkość migania
+    [SerializeField] private float speed = 2f;
 
     void Update()
     {

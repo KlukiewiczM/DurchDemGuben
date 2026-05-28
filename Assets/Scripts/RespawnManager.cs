@@ -30,7 +30,6 @@ public class RespawnManager : MonoBehaviour
 
     private System.Collections.IEnumerator RespawnRoutine(GameObject player)
     {
-        // opcjonalnie: chwilowe "zniknięcie" / blokada ruchu
         var rb = player.GetComponent<Rigidbody2D>();
         if (rb != null) rb.linearVelocity = Vector2.zero;
 

@@ -61,7 +61,6 @@ public class NotEnoughCoinsTrigger : MonoBehaviour
         if (CoinManager.Instance == null)
             return;
 
-        // JEŚLI gracz ma 3 lub więcej coinów -> nic nie rób
         if (CoinManager.Instance.Coins >= requiredCoins)
             return;
 
@@ -79,8 +78,6 @@ public class NotEnoughCoinsTrigger : MonoBehaviour
 
         bool hasEnoughCoins = CoinManager.Instance.Coins >= requiredCoins;
 
-        // mniej niż 3 -> ściana aktywna
-        // 3 lub więcej -> ściana wyłączona
         blockingWall.SetActive(!hasEnoughCoins);
     }
 

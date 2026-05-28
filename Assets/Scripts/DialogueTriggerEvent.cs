@@ -56,10 +56,8 @@ public class DialogueTriggerEvent : MonoBehaviour
 
         if (waitForSpace)
         {
-            // blokada skipa
             yield return new WaitForSeconds(secondsBeforeSpaceAllowed);
 
-            // dopiero teraz można zamknąć SPACE
             while (!Input.GetKeyDown(KeyCode.Space))
                 yield return null;
         }

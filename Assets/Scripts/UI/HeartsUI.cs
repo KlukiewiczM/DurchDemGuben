@@ -3,12 +3,10 @@ using UnityEngine.UI;
 
 public class HeartsUI : MonoBehaviour
  {
-        [SerializeField] private Image[] hearts; // 3 obrazki
-
-        // na razie tylko test:
+        [SerializeField] private Image[] hearts;
+       
         private void Start()
-        {
-            // upewniamy się że są widoczne
+        {            
             SetHearts(3);
         }
 

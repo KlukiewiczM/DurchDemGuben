@@ -7,6 +7,5 @@ public class NewMonoBehaviourScript : MonoBehaviour
         var selected = CharacterSelectController.GetSavedCharacter();
         Debug.Log("Selected character: " + selected);
 
-        // później: spawn odpowiedniego prefaba (male/female)
     }
 }
